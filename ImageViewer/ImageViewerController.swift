@@ -7,7 +7,7 @@ public final class ImageViewerController: UIViewController {
     @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
     @IBOutlet fileprivate var closeButton: UIButton! {
         didSet {
-            let closeImage = UIImage(named: "closeButton", in: Bundle.module, compatibleWith: nil)
+            let closeImage = UIImage(named: "closeButton")
             closeButton.setImage(closeImage, for: .normal)
         }
     }
@@ -21,7 +21,7 @@ public final class ImageViewerController: UIViewController {
     
     public init(configuration: ImageViewerConfiguration?) {
         self.configuration = configuration
-        super.init(nibName: "ImageViewerController", bundle: .module)
+        super.init(nibName: "ImageViewerController", bundle: nil)
         
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
