@@ -5,12 +5,6 @@ public final class ImageViewerController: UIViewController {
     @IBOutlet fileprivate var scrollView: UIScrollView!
     @IBOutlet fileprivate var imageView: UIImageView!
     @IBOutlet fileprivate var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet fileprivate var closeButton: UIButton! {
-        didSet {
-            let closeImage = UIImage(named: "closeButton")
-            closeButton.setImage(closeImage, for: .normal)
-        }
-    }
     
     fileprivate var transitionHandler: ImageViewerTransitioningHandler?
     fileprivate let configuration: ImageViewerConfiguration?
@@ -21,7 +15,7 @@ public final class ImageViewerController: UIViewController {
     
     public init(configuration: ImageViewerConfiguration?) {
         self.configuration = configuration
-        super.init(nibName: "ImageViewerController", bundle: nil)
+        super.init(nibName: String(describing: type(of: self)), bundle: Bundle(for: type(of: self)))
         
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
@@ -104,21 +98,11 @@ private extension ImageViewerController {
         dismiss(animated: true)
     }
     
-    @objc func imageViewDoubleTapped(recognizer: UITapGestureRecognizer) {
-        func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
-            var zoomRect = CGRect.zero
-            zoomRect.size.height = imageView.frame.size.height / scale
-            zoomRect.size.width  = imageView.frame.size.width  / scale
-            let newCenter = scrollView.convert(center, from: imageView)
-            zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
-            zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
-            return zoomRect
-        }
-
+    @objc func imageViewDoubleTapped() {
         if scrollView.zoomScale > scrollView.minimumZoomScale {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
         } else {
-            scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: recognizer.location(in: recognizer.view)), animated: true)
+            scrollView.setZoomScale(scrollView.maximumZoomScale, animated: true)
         }
     }
     
